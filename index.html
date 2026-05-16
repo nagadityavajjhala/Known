@@ -1,0 +1,1855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NAG ADITYA VAJJHALA — Artist & Designer</title>
+<link rel="preload" href="hero.jpg" as="image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #C0140A;
+    --red-hot: #FF1A0E;
+    --red-dark: #7A0A05;
+    --black: #080808;
+    --off-black: #111111;
+    --charcoal: #1A1A1A;
+    --cream: #F5F0E8;
+    --white: #FAFAFA;
+    --mid: #444;
+    --gap: clamp(1rem, 3vw, 3rem);
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--cream);
+    font-family: 'Barlow', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+  
+  body.locked {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* LOADER & INTRO OVERLAY */
+  #loader {
+    position: fixed; inset: 0; background: var(--black); z-index: 2000;
+    display: flex; align-items: center; justify-content: center;
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .loader-logo {
+    font-family: 'Barlow Condensed', sans-serif; font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 700; letter-spacing: 0.3em; color: var(--cream);
+    animation: pulseLogo 4.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  }
+  
+  @keyframes pulseLogo {
+    0% { transform: scale(0.95); letter-spacing: 0.2em; opacity: 0; }
+    10% { opacity: 1; }
+    50% { transform: scale(1.05); letter-spacing: 0.4em; color: var(--red); }
+    90% { opacity: 1; }
+    100% { transform: scale(1.1); letter-spacing: 0.5em; opacity: 0; }
+  }
+
+  #center-overlay {
+    position: fixed; inset: 0; background: var(--black); z-index: 1500;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.8s ease;
+  }
+  
+  #center-overlay.visible { opacity: 1; pointer-events: auto; }
+  
+  .loader-name {
+    font-family: 'Playfair Display', serif; font-size: clamp(3.5rem, 7vw, 7rem);
+    font-weight: 900; line-height: 0.95; letter-spacing: -0.02em; color: var(--cream);
+    text-align: center; margin: 0;
+    will-change: transform;
+    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1); 
+  }
+  
+  .loader-name .the {
+    font-style: italic; font-weight: 400; font-size: 0.5em; display: block;
+    color: var(--red); margin-bottom: 0.2em;
+  }
+  
+  .scroll-prompt {
+    font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.2rem;
+    color: var(--red); margin-top: 3rem; transition: opacity 0.5s ease;
+    animation: gentlePulse 2s infinite ease-in-out;
+  }
+
+  @keyframes gentlePulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  /* HARDWARE ACCELERATED CUSTOM CURSOR */
+  .cursor {
+    position: fixed; top: 0; left: 0; width: 10px; height: 10px; background: var(--red);
+    border-radius: 50%; pointer-events: none; z-index: 9999;
+    will-change: transform;
+    transform: translate3d(-50%, -50%, 0);
+  }
+  .cursor-ring {
+    position: fixed; top: 0; left: 0; width: 40px; height: 40px; border: 1px solid rgba(192,20,10,0.5);
+    border-radius: 50%; pointer-events: none; z-index: 9998;
+    will-change: transform, width, height;
+    transform: translate3d(-50%, -50%, 0); 
+    transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+  }
+  body:has(a:hover) .cursor-ring,
+  body:has(button:hover) .cursor-ring { width: 70px; height: 70px; border-color: var(--red); background: rgba(192,20,10,0.05); }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.25rem 3rem; 
+    background: var(--black); 
+    border-bottom: 1px solid var(--charcoal);
+    transition: transform 0.4s ease, opacity 0.4s ease; 
+  }
+  .nav-logo {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.85rem;
+    letter-spacing: 0.3em; text-transform: uppercase; color: var(--cream); text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--cream); text-decoration: none;
+    opacity: 0.7; transition: opacity 0.3s ease, color 0.3s ease;
+  }
+  .nav-links a:hover { opacity: 1; color: var(--red); }
+
+  /* ----------------------------------------------------- */
+  /* ORIGINAL HERO LAYOUT */
+  /* ----------------------------------------------------- */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--red-dark);
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 8rem 3rem 4rem;
+    position: relative;
+    z-index: 2;
+    border-right: 1px solid var(--red-dark);
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 2rem;
+    opacity: 0;
+  }
+
+  .hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 7vw, 7rem);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--cream);
+    opacity: 0;
+  }
+
+  .hero-name .the {
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.5em;
+    display: block;
+    color: var(--red);
+    margin-bottom: 0.2em;
+  }
+
+  .hero-tagline {
+    margin-top: 2rem;
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: rgba(245,240,232,0.65);
+    max-width: 380px;
+    opacity: 0;
+  }
+
+  .hero-cta {
+    margin-top: 3rem;
+    display: flex;
+    gap: 1rem;
+    opacity: 0;
+  }
+
+  /* Classes activated by JS for transition */
+  .hero-eyebrow.animate-in { animation: fadeUp 0.8s forwards 0s; }
+  .hero-tagline.animate-in { animation: fadeUp 1s forwards 0.2s; }
+  .hero-cta.animate-in { animation: fadeUp 1s forwards 0.4s; }
+  .hero-scroll-hint.animate-in { animation: fadeIn 1s forwards 0.6s; }
+
+  .btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    text-decoration: none;
+    transition: all 0.25s;
+    cursor: none;
+    display: inline-block;
+  }
+  .btn-primary { background: var(--red); color: var(--cream); border: 1px solid var(--red); }
+  .btn-primary:hover { background: transparent; color: var(--red); }
+  .btn-outline { background: transparent; color: var(--cream); border: 1px solid rgba(245,240,232,0.3); }
+  .btn-outline:hover { border-color: var(--red); color: var(--red); }
+
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+    background: var(--off-black);
+  }
+
+  .hero-image-placeholder {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(135deg, var(--red-dark) 0%, transparent 50%),
+      var(--charcoal);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .img-placeholder {
+    border: 1px dashed rgba(192,20,10,0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: rgba(245,240,232,0.3);
+  }
+  .img-placeholder .ph-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .img-placeholder .ph-path {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    color: rgba(192,20,10,0.6);
+  }
+  .img-placeholder svg { opacity: 0.3; }
+
+  /* Image loads instantly when transition triggers now */
+  .hero-photo {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  .hero-photo.animate-in {
+    opacity: 1;
+  }
+
+  .hero-stats {
+    position: absolute;
+    bottom: 2rem; right: 2rem;
+    display: flex;
+    gap: 2rem;
+    z-index: 3;
+  }
+  .stat { text-align: right; }
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--red);
+    display: block;
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.5);
+  }
+
+  .hero-scroll-hint {
+    position: absolute;
+    bottom: 2rem; left: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    opacity: 0;
+  }
+
+  .scroll-line {
+    width: 40px; height: 1px;
+    background: var(--red);
+    transform-origin: left;
+    animation: expandLine 1.5s ease 1s forwards;
+    transform: scaleX(0);
+  }
+  .scroll-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.4);
+  }
+
+  /* RED MARQUEE BAND */
+  .marquee-band {
+    background: var(--red);
+    padding: 0.75rem 0;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative; 
+    z-index: 5;
+  }
+  .marquee-inner {
+    display: inline-flex;
+    animation: marquee 20s linear infinite;
+  }
+  .marquee-inner span {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--cream);
+    padding: 0 2rem;
+  }
+  .marquee-inner .dot {
+    color: rgba(245,240,232,0.4);
+    padding: 0;
+  }
+
+  /* SECTIONS GENERAL */
+  section {
+    padding: 6rem 3rem;
+    border-bottom: 1px solid var(--charcoal);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+  }
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--red);
+    letter-spacing: 0.2em;
+  }
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+    color: var(--cream);
+    flex: 1;
+  }
+  .section-title em {
+    font-style: italic;
+    color: var(--red);
+  }
+  .section-divider {
+    width: 60px; height: 2px;
+    background: var(--red);
+    margin-bottom: 4rem;
+  }
+
+  /* ABOUT */
+  #about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+  }
+  .about-text p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: rgba(245,240,232,0.75);
+    margin-bottom: 1.5rem;
+  }
+  .about-text p strong { color: var(--cream); font-weight: 500; }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--charcoal);
+  }
+  .skill-item {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--charcoal);
+    border-right: 1px solid var(--charcoal);
+    transition: background 0.2s;
+  }
+  .skill-item:hover { background: var(--charcoal); }
+  .skill-item:nth-child(2n) { border-right: none; }
+  .skill-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--cream);
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+  .skill-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--red);
+    letter-spacing: 0.1em;
+  }
+
+  /* LOGO & EDUCATION DETAILS */
+  .org-logo {
+    width: 48px; height: 48px; object-fit: contain;
+    filter: grayscale(100%) contrast(1.5) brightness(1.2);
+    mix-blend-mode: screen;
+  }
+  .window-role-header .org-logo { width: 56px; height: 56px; }
+  .edu-section-label {
+    font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--red);
+    text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.5rem; margin-top: 1.5rem;
+  }
+  .edu-list { list-style: none; padding: 0; margin: 0; }
+  .edu-list li {
+    font-size: 0.8rem; color: rgba(245,240,232,0.7); line-height: 1.5; margin-bottom: 0.5rem;
+    position: relative; padding-left: 1rem;
+  }
+  .edu-list li::before {
+    content: '◆'; position: absolute; left: 0; top: 0.1rem; font-size: 0.5rem; color: var(--red);
+  }
+  .edu-skills-grid { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+  .edu-skill-tag {
+    font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.15em;
+    text-transform: uppercase; padding: 0.3rem 0.6rem; background: rgba(255,255,255,0.05);
+    border: 1px solid var(--charcoal); color: var(--cream); border-radius: 2px;
+  }
+
+  /* EDUCATION GRID */
+  #education { background: var(--off-black); }
+  .education-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 1rem;
+  }
+  .edu-card {
+    background: var(--charcoal);
+    border: 1px solid var(--mid);
+    padding: 2.5rem;
+    position: relative;
+    transition: border-color 0.3s, transform 0.3s;
+    cursor: none;
+  }
+  .edu-card:hover {
+    border-color: var(--red);
+    transform: translateY(-4px);
+  }
+  .edu-year {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+  .edu-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .institution-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--cream);
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+  }
+  .institution-location {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: rgba(245,240,232,0.4);
+    letter-spacing: 0.15em;
+    margin-top: 0.4rem;
+  }
+  .timeline-degree {
+    font-size: 0.85rem;
+    color: rgba(245,240,232,0.65);
+    line-height: 1.6;
+  }
+  .subjects-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+  .subject-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    border: 1px solid;
+  }
+  .subject-tag.hl { border-color: var(--red); color: var(--red); }
+  .subject-tag.sl { border-color: var(--mid); color: rgba(245,240,232,0.5); }
+  .upcoming-badge {
+    position: absolute;
+    top: -10px; right: 2rem;
+    background: var(--red);
+    color: var(--cream);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.4rem 1rem;
+    box-shadow: 0 4px 12px rgba(192,20,10,0.3);
+  }
+
+  /* TRAVEL & GLOBAL CITIZEN */
+  #travel {
+    background: var(--black);
+    overflow: hidden;
+    padding-bottom: 8rem;
+  }
+  .travel-statement {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    color: var(--cream);
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    font-weight: 900;
+  }
+  .travel-statement em { color: var(--red); font-style: italic; }
+  .travel-path {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: rgba(245,240,232,0.6);
+    line-height: 2;
+    letter-spacing: 0.15em;
+    max-width: 900px;
+    margin-bottom: 4rem;
+    text-transform: uppercase;
+  }
+  .travel-path span { color: var(--red); margin: 0 0.5rem; font-weight: bold; }
+  
+  .travel-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100vw;
+    margin-left: -3rem; 
+  }
+  .travel-track {
+    display: flex;
+    gap: 1rem;
+    width: max-content;
+    animation: scrollTrack 40s linear infinite;
+  }
+  .travel-track.reverse {
+    animation-direction: reverse;
+    animation-duration: 45s;
+  }
+  .travel-img {
+    width: 280px;
+    height: 320px;
+    object-fit: cover;
+    border: 1px solid var(--charcoal);
+    transition: transform 0.4s;
+    cursor: none;
+    /* FULL COLOR RESTORED */
+  }
+  .travel-img:hover {
+    transform: scale(1.02);
+  }
+
+  @keyframes scrollTrack {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(-50% - 0.5rem)); }
+  }
+
+  /* WORK EXPERIENCE — WINDOWS */
+  #work { background: var(--black); }
+  .windows-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .window-card {
+    border: 1px solid var(--charcoal);
+    background: var(--off-black);
+    transition: border-color 0.3s, transform 0.3s;
+    cursor: none;
+  }
+  .window-card:hover {
+    border-color: var(--red);
+    transform: translateY(-4px);
+  }
+  .window-card.featured { grid-column: span 2; }
+  .window-titlebar {
+    background: var(--charcoal);
+    padding: 0.6rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--mid);
+  }
+  .window-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+  .window-dot:nth-child(1) { background: var(--red); }
+  .window-dot:nth-child(2) { background: #555; }
+  .window-dot:nth-child(3) { background: #333; }
+  .window-title-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: rgba(245,240,232,0.4);
+    margin-left: 0.5rem;
+  }
+  .window-body { padding: 2rem; }
+  .window-role-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .role-info {}
+  .role-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--cream);
+    line-height: 1;
+  }
+  .company-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--red);
+    letter-spacing: 0.15em;
+    margin-top: 0.4rem;
+  }
+  .role-period {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: rgba(245,240,232,0.35);
+    letter-spacing: 0.15em;
+    white-space: nowrap;
+  }
+  .role-desc {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: rgba(245,240,232,0.65);
+    margin-bottom: 1.25rem;
+  }
+  .role-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .role-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid var(--charcoal);
+    color: rgba(245,240,232,0.5);
+  }
+
+  /* EXHIBITIONS */
+  #exhibitions { background: var(--off-black); }
+  .exhibition-hero {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    align-items: flex-start;
+    margin-bottom: 4rem;
+  }
+  .exhibition-title-block {
+    max-width: 900px;
+  }
+  .exhibition-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 6vw, 5.5rem); 
+    font-weight: 900;
+    font-style: italic;
+    line-height: 1.05;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
+  }
+  .exhibition-name span { color: var(--red); font-style: normal; }
+  .exhibition-meta {
+    display: flex;
+    gap: 2.5rem;
+    margin-bottom: 2rem;
+  }
+  .exhibition-desc {
+    font-size: 1rem; 
+    line-height: 1.8;
+    color: rgba(245,240,232,0.75);
+    margin-bottom: 1.5rem;
+  }
+  .gallery-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+  .gallery-item {
+    aspect-ratio: 3/4;
+    background: var(--charcoal);
+    border: 1px solid var(--mid);
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.4s ease;
+    cursor: none;
+  }
+  .gallery-item:hover { transform: scale(1.02); z-index: 2; }
+  .gallery-item.tall { grid-row: span 2; aspect-ratio: auto; }
+  .gallery-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s;
+    /* FULL COLOR RESTORED */
+  }
+  .gallery-item:hover img { transform: scale(1.05); }
+  .gallery-item .img-placeholder {
+    width: 100%; height: 100%;
+    min-height: 200px;
+    border: none;
+    background: var(--charcoal);
+  }
+  .gallery-caption {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(transparent, rgba(8,8,8,0.9));
+    padding: 1.5rem 1rem 0.75rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .gallery-item:hover .gallery-caption { opacity: 1; }
+  .gallery-caption-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--cream);
+    letter-spacing: 0.05em;
+  }
+
+  /* TECHNICAL PROJECT */
+  #technical {
+    background: var(--black);
+    position: relative;
+    overflow: hidden;
+  }
+  #technical::before {
+    content: 'DT IA';
+    position: absolute;
+    right: -2rem;
+    top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12rem;
+    font-weight: 900;
+    color: rgba(192,20,10,0.04);
+    pointer-events: none;
+  }
+  .technical-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .tech-tag {
+    display: inline-block;
+    border: 1px solid var(--red);
+    color: var(--red);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .tech-project-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
+  }
+  .tech-desc {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: rgba(245,240,232,0.65);
+    margin-bottom: 2rem;
+  }
+  .tech-specs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--charcoal);
+    margin-top: 2rem;
+  }
+  .spec-item {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--charcoal);
+    border-right: 1px solid var(--charcoal);
+  }
+  .spec-item:nth-child(2n) { border-right: none; }
+  .spec-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+  .spec-value {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--cream);
+    text-transform: uppercase;
+  }
+.technical-visuals { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+  .tech-visual { background: var(--charcoal); border: 1px solid var(--mid); position: relative; overflow: hidden; }
+  .tech-visual.main { grid-column: span 2; }
+  
+  /* NEW IMAGE STYLING */
+  .tech-img {
+    width: 100%;
+    height: 100%;
+    min-height: 200px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  .tech-visual.main .tech-img {
+    min-height: 300px;
+  }
+  .tech-visual:hover .tech-img {
+    transform: scale(1.02);
+  }
+
+  /* CONTACT */
+  #contact {
+    background: var(--red);
+    padding: 8rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  #contact::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(255,26,14,0.3) 0%, transparent 70%);
+  }
+  .contact-inner { position: relative; z-index: 2; }
+  .contact-pre {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.6);
+    margin-bottom: 2rem;
+  }
+  .contact-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 7vw, 8rem);
+    font-weight: 900;
+    color: var(--cream);
+    line-height: 0.95;
+    margin-bottom: 3rem;
+  }
+  .contact-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .contact-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--cream);
+    text-decoration: none;
+    padding-bottom: 2px;
+    border-bottom: 1px solid rgba(245,240,232,0.4);
+    transition: border-color 0.2s;
+  }
+  .contact-link:hover { border-color: var(--cream); }
+
+  /* FOOTER */
+  footer {
+    background: var(--black);
+    padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--charcoal);
+  }
+  .footer-copy {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: rgba(245,240,232,0.3);
+  }
+  .footer-ig {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: rgba(245,240,232,0.3);
+    text-decoration: none;
+  }
+  .footer-ig:hover { color: var(--red); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes expandLine {
+    to { transform: scaleX(1); }
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    #hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    #about { grid-template-columns: 1fr; gap: 3rem; }
+    .windows-container { grid-template-columns: 1fr; }
+    .window-card.featured { grid-column: span 1; }
+    .exhibition-hero { grid-template-columns: 1fr; }
+    .technical-grid { grid-template-columns: 1fr; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; }
+    .education-grid { grid-template-columns: 1fr; } 
+    nav { padding: 1rem 1.5rem; }
+    section { padding: 4rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="loader-logo">NAV ✦</div>
+</div>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav id="navbar">
+  <a href="#" class="nav-logo">NAV ✦</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#travel">Travel</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#exhibitions">Exhibitions</a></li>
+    <li><a href="#photography">Photo &amp; Digital</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Artist &amp; Designer — India, 2026</div>
+    <h1 class="hero-name">
+      <span class="the">the</span>
+      Nag<br>Aditya<br>Vajjhala
+    </h1>
+    <p class="hero-tagline">
+      Fine artist. Graphic designer. Sculptor. Visual storyteller. 
+      Blending digital concept art, character design, and interactive experiences 
+      into work that is raw, resonant, and deeply human.
+    </p>
+    <div class="hero-cta">
+      <a href="#exhibitions" class="btn btn-primary">View Exhibitions</a>
+      <a href="#contact" class="btn btn-outline">Get In Touch</a>
+    </div>
+    <div class="hero-scroll-hint">
+      <div class="scroll-line"></div>
+      <span class="scroll-text">Scroll to explore</span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-image-placeholder">
+      <img src="hero.jpg" alt="Nag Aditya Vajjhala" class="hero-photo">
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-number">9+</span>
+        <span class="stat-label">Years Fine Arts</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">∞</span>
+        <span class="stat-label">Media Types</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee-band">
+  <div class="marquee-inner">
+    <span>Fine Arts</span><span class="dot">◆</span>
+    <span>Graphic Design</span><span class="dot">◆</span>
+    <span>Digital Illustration</span><span class="dot">◆</span>
+    <span>Sculpture</span><span class="dot">◆</span>
+    <span>Photography</span><span class="dot">◆</span>
+    <span>Character Design</span><span class="dot">◆</span>
+    <span>Poster Design</span><span class="dot">◆</span>
+    <span>3D Modelling</span><span class="dot">◆</span>
+    <span>Fine Arts</span><span class="dot">◆</span>
+    <span>Graphic Design</span><span class="dot">◆</span>
+    <span>Digital Illustration</span><span class="dot">◆</span>
+    <span>Sculpture</span><span class="dot">◆</span>
+    <span>Photography</span><span class="dot">◆</span>
+    <span>Character Design</span><span class="dot">◆</span>
+    <span>Poster Design</span><span class="dot">◆</span>
+    <span>3D Modelling</span><span class="dot">◆</span>
+  </div>
+</div>
+
+<section id="about">
+  <div class="about-text reveal">
+    <div class="section-header">
+      <span class="section-num">01 /</span>
+      <h2 class="section-title">Who<br>I <em>Am</em></h2>
+    </div>
+    <p>
+      I'm <strong>Nag Aditya Vajjhala</strong> — a passionate artist and designer dedicated to 
+      inspiring, and conveying visionary ideas while capturing life's most genuine moments.
+    </p>
+    <p>
+      I specialize in <strong>fine arts and graphic design</strong> — poster design, web design, 
+      digital illustration, sculpture, and photography — blending creativity and storytelling 
+      to create designs that resonate.
+    </p>
+    <p>
+      Every design I make is a reflection of my commitment to <strong>authenticity, artistry, 
+      and emotion</strong>. Currently completing my IBDP with a focus on HL Visual Arts, 
+      while actively working as a Graphic Designer and building a body of work that spans 
+      canvas, code, and clay.
+    </p>
+    <p style="margin-top:2rem">
+      <a href="https://www.instagram.com/nagadityavajjhala" target="_blank" class="btn btn-outline" style="font-size:0.75rem; padding:0.7rem 1.5rem;">
+        @nagadityavajjhala
+      </a>
+    </p>
+  </div>
+  <div class="reveal" style="transition-delay:0.2s">
+    <div class="section-header" style="margin-bottom:1rem">
+      <span class="section-num">—</span>
+      <h3 class="section-title" style="font-size:1.5rem">Disciplines</h3>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-item">
+        <span class="skill-name">Painting</span>
+        <span class="skill-sub">Acrylics on Canvas</span>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Digital Art</span>
+        <span class="skill-sub">Illustration &amp; Concept</span>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Sculpture</span>
+        <span class="skill-sub">Clay &amp; Mixed Media</span>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Poster Design</span>
+        <span class="skill-sub">Editorial &amp; Brand</span>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Photography</span>
+        <span class="skill-sub">Architecture &amp; Portrait</span>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">3D Modelling</span>
+        <span class="skill-sub">Product &amp; Concept</span>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Character Design</span>
+        <span class="skill-sub">Manga &amp; Comics</span>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Graphic Design</span>
+        <span class="skill-sub">Branding &amp; Marketing</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="section-header reveal">
+    <span class="section-num">02 /</span>
+    <h2 class="section-title">Education<br><em>Journey</em></h2>
+  </div>
+
+  <div class="education-grid">
+    
+    <div class="edu-card reveal">
+      <span class="upcoming-badge">Fall 2026</span>
+      <span class="edu-year" style="color: rgba(245,240,232,0.4);">Upcoming</span>
+      <div class="edu-header">
+        <img class="org-logo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.5'><path d='M12 3l8 4-8 4-8-4 8-4z'/><path d='M4 11v6l8 4 8-4v-6'/></svg>" alt="University Logo" style="opacity: 0.5;">
+        <div>
+          <div class="institution-name" style="opacity:0.5;">University — TBD</div>
+          <div class="institution-location">Bachelor's Degree</div>
+        </div>
+      </div>
+      <div class="timeline-degree" style="opacity:0.5;">Undergraduate studies beginning Fall 2026. Watch this space.</div>
+    </div>
+
+    <div class="edu-card reveal" style="transition-delay:0.1s">
+      <span class="edu-year">July 2025 – May 2026</span>
+      <div class="edu-header">
+        <img class="org-logo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.5'><path d='M22 10v6M2 10l10-5 10 5-10 5z'/><path d='M6 12v5c3 3 9 3 12 0v-5'/></svg>" alt="Indus Logo">
+        <div>
+          <div class="institution-name">Indus International School Bangalore (IISB)</div>
+          <div class="institution-location">IB Diploma Programme (IBDP) — Grade 12</div>
+        </div>
+      </div>
+      <div class="timeline-degree">International Baccalaureate</div>
+      
+      <div class="edu-section-label">Activities & Societies</div>
+      <ul class="edu-list">
+        <li>Performed during Teacher's Day, Children's Day, and Indus Day (a prestigious annual event).</li>
+        <li>Participated in Sports Day: 100M (3rd Place Bronze Medal), and 100M 4-Person Relay (2nd Place Silver Medal).</li>
+      </ul>
+
+      <div class="edu-section-label">Subjects</div>
+      <div class="subjects-grid">
+        <span class="subject-tag hl">HL English Lang & Lit</span>
+        <span class="subject-tag hl">HL Visual Arts</span>
+        <span class="subject-tag hl">HL History</span>
+        <span class="subject-tag sl">SL Spanish ab Initio</span>
+        <span class="subject-tag sl">SL Math AI</span>
+        <span class="subject-tag sl">SL Design Tech</span>
+      </div>
+
+      <div class="edu-section-label">Core Skills</div>
+      <div class="edu-skills-grid">
+        <span class="edu-skill-tag">Typography</span>
+        <span class="edu-skill-tag">Design</span>
+        <span class="edu-skill-tag">Performing Arts</span>
+        <span class="edu-skill-tag">Visual Arts</span>
+        <span class="edu-skill-tag">CAD Modelling</span>
+        <span class="edu-skill-tag">English Communication</span>
+      </div>
+    </div>
+
+    <div class="edu-card reveal">
+      <span class="edu-year">Aug 2023 – June 2025</span>
+      <div class="edu-header">
+        <img class="org-logo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.5'><circle cx='12' cy='12' r='10'/><path d='M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z'/></svg>" alt="MIRAS Logo">
+        <div>
+          <div class="institution-name">Miras International School</div>
+          <div class="institution-location">Almaty, Kazakhstan</div>
+        </div>
+      </div>
+      <div class="timeline-degree">IB Diploma Programme — Grades 10 & 11</div>
+      
+      <div class="edu-section-label">Activities & Societies</div>
+      <ul class="edu-list">
+        <li>Member of the Student Council</li>
+        <li>Head of Arts Club</li>
+        <li>Homeroom Leader</li>
+        <li>Swimming competition winner — 1 Gold Medal</li>
+        <li>Played Volleyball</li>
+        <li>80th Victory Day — Essay Competition winner</li>
+      </ul>
+
+      <div class="edu-section-label">Core Skills</div>
+      <div class="edu-skills-grid">
+        <span class="edu-skill-tag">Typography</span>
+        <span class="edu-skill-tag">Graphic Design</span>
+        <span class="edu-skill-tag">CAD</span>
+        <span class="edu-skill-tag">Logo Design</span>
+        <span class="edu-skill-tag">Leadership</span>
+        <span class="edu-skill-tag">English</span>
+      </div>
+    </div>
+
+    <div class="edu-card reveal" style="transition-delay:0.1s">
+      <span class="edu-year">Jul 2023 – August 2023</span>
+      <div class="edu-header">
+        <img class="org-logo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.5'><rect x='3' y='3' width='18' height='18' rx='2'/><path d='M3 9h18M9 21V9'/></svg>" alt="Aga Khan Logo">
+        <div>
+          <div class="institution-name">The Aga Khan Academy</div>
+          <div class="institution-location">Hyderabad, India</div>
+        </div>
+      </div>
+      <div class="timeline-degree">International Baccalaureate — Grade 10</div>
+      
+      <div class="edu-section-label">Activities & Societies</div>
+      <ul class="edu-list">
+        <li>Joined the debate team and participated in debate competitions.</li>
+        <li>Completed Model United Nations (MUN) training.</li>
+        <li>Mountain Biking, Squash, and Swimming.</li>
+      </ul>
+    </div>
+
+    <div class="edu-card reveal">
+      <span class="edu-year">Aug 2021 – July 2023</span>
+      <div class="edu-header">
+        <img class="org-logo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.5'><polygon points='12 2 2 22 22 22'/></svg>" alt="ISD Logo">
+        <div>
+          <div class="institution-name">Int'l School of Dhaka</div>
+          <div class="institution-location">Dhaka, Bangladesh</div>
+        </div>
+      </div>
+      <div class="timeline-degree">Secondary Education — Grades 8 & 9</div>
+      
+      <div class="edu-section-label">Core Skills</div>
+      <div class="edu-skills-grid">
+        <span class="edu-skill-tag">Graphic Design</span>
+        <span class="edu-skill-tag">Design</span>
+        <span class="edu-skill-tag">Performing Arts</span>
+        <span class="edu-skill-tag">Debate</span>
+        <span class="edu-skill-tag">Athletics</span>
+        <span class="edu-skill-tag">English</span>
+      </div>
+    </div>
+
+    <div class="edu-card reveal" style="transition-delay:0.1s">
+      <span class="edu-year">Aug 2016 – Jul 2021</span>
+      <div class="edu-header">
+        <img class="org-logo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.5'><path d='M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3'/></svg>" alt="Uplands Logo">
+        <div>
+          <div class="institution-name">Int'l School of Penang (Uplands)</div>
+          <div class="institution-location">Penang, Malaysia</div>
+        </div>
+      </div>
+      <div class="timeline-degree">Primary & Early Secondary — Grades 3 to 7</div>
+
+      <div class="edu-section-label">Activities & Societies</div>
+      <ul class="edu-list">
+        <li>Performing Arts: Solo dance performance as 'Earth' in "The Elements of Earth".</li>
+        <li>Midfield and Left-wing defender in Football, participated in Fobisia twice.</li>
+        <li>School swimming team: Won 5 Gold and 3 Silver medals at the Grade 7 Swimming Gala.</li>
+        <li>Grade 7 Debate Club student.</li>
+      </ul>
+
+      <div class="edu-section-label">Core Skills</div>
+      <div class="edu-skills-grid">
+        <span class="edu-skill-tag">Graphic Design</span>
+        <span class="edu-skill-tag">Design</span>
+        <span class="edu-skill-tag">Performing Arts</span>
+        <span class="edu-skill-tag">Debate</span>
+        <span class="edu-skill-tag">Athletics</span>
+        <span class="edu-skill-tag">English</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="travel">
+  <div class="section-header reveal">
+    <span class="section-num">03 /</span>
+    <h2 class="section-title">Global<br><em>Citizen</em></h2>
+  </div>
+
+  <div class="reveal">
+    <h3 class="travel-statement">By Birth: <em>Indian</em><br>By Heart: <em>Global Citizen</em></h3>
+    <p class="travel-path">
+      Dubai <span>→</span> Italy (Rome) <span>→</span> Belgium <span>→</span> Switzerland <span>→</span> Barcelona <span>→</span> Malaysia (Penang, Kuala Lumpur) <span>→</span> Bangladesh (Dhaka) <span>→</span> Singapore <span>→</span> Cambodia <span>→</span> Kazakhstan (Almaty) <span>→</span> China (Beijing)
+    </p>
+  </div>
+
+  <div class="travel-gallery reveal" style="transition-delay:0.2s">
+    <div class="travel-track">
+      <img src="images/travel/1.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/2.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/3.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/4.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/5.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/6.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/7.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/8.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/5.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/10.JPG" class="travel-img" alt="Travel">
+      <img src="images/travel/1.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/2.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/3.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/4.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/5.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/6.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/7.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/8.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/9.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/10.jpg" class="travel-img" alt="Travel">
+    </div>
+
+    <div class="travel-track reverse">
+      <img src="images/travel/13.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/14.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/15.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/16.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/17.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/18.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/19.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/20.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/13.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/14.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/15.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/16.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/17.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/18.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/19.jpg" class="travel-img" alt="Travel">
+      <img src="images/travel/20.jpg" class="travel-img" alt="Travel">
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="section-header reveal">
+    <span class="section-num">04 /</span>
+    <h2 class="section-title">Work<br><em>Experience</em></h2>
+  </div>
+  <div class="windows-container">
+
+    <div class="window-card featured reveal">
+      <div class="window-titlebar">
+        <div class="window-dot"></div>
+        <div class="window-dot"></div>
+        <div class="window-dot"></div>
+        <span class="window-title-text">team-pumpkin.exe — Graphic Designer</span>
+      </div>
+      <div class="window-body">
+        <div class="window-role-header">
+          <div class="role-info">
+            <div class="role-title">Graphic Designer</div>
+            <div class="company-name">◆ Team Pumpkin — Digital Marketing Agency</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:1.5rem;">
+            <div class="role-period">Current Role</div>
+            <img class="org-logo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.5'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM12 22C6.48 22 2 17.52 2 12S6.48 2 12 2s10 4.48 10 10-4.48 10-10 10z'/></svg>" alt="Team Pumpkin">
+          </div>
+        </div>
+        <p class="role-desc">
+          Designing compelling visual content for digital marketing campaigns. Working within 
+          a fast-paced agency environment to produce creative assets — from social media graphics 
+          to marketing collateral — that drive engagement and communicate brand stories effectively.
+        </p>
+        <div class="role-tags">
+          <span class="role-tag">Brand Design</span>
+          <span class="role-tag">Social Media</span>
+          <span class="role-tag">Marketing Assets</span>
+          <span class="role-tag">Digital Campaigns</span>
+          <span class="role-tag">Typography</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="window-card reveal" style="transition-delay:0.1s">
+      <div class="window-titlebar">
+        <div class="window-dot"></div>
+        <div class="window-dot"></div>
+        <div class="window-dot"></div>
+        <span class="window-title-text">kalinga-tv.exe — Design Intern</span>
+      </div>
+      <div class="window-body">
+        <div class="window-role-header">
+          <div class="role-info">
+            <div class="role-title">Graphic Design Intern</div>
+            <div class="company-name">◆ Kalinga TV, Odisha</div>
+          </div>
+          <img class="org-logo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.5'><rect x='2' y='7' width='20' height='15' rx='2' ry='2'/><polyline points='17 2 12 7 7 2'/></svg>" alt="Kalinga TV">
+        </div>
+        <p class="role-desc">
+          Interned at Odisha's biggest news and media channel. Designed posters 
+          and marketing materials, gained hands-on experience in photo editing, 
+          retouching, and 3D modelling.
+        </p>
+        <div class="role-tags">
+          <span class="role-tag">Poster Design</span>
+          <span class="role-tag">Photo Retouching</span>
+          <span class="role-tag">3D Modelling</span>
+          <span class="role-tag">Media &amp; News</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="window-card reveal" style="transition-delay:0.2s">
+      <div class="window-titlebar">
+        <div class="window-dot"></div>
+        <div class="window-dot"></div>
+        <div class="window-dot"></div>
+        <span class="window-title-text">miras-sc.exe — Head of Arts</span>
+      </div>
+      <div class="window-body">
+        <div class="window-role-header">
+          <div class="role-info">
+            <div class="role-title">Head of Arts</div>
+            <div class="company-name">◆ MIRAS Student Council</div>
+          </div>
+          <img class="org-logo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.5'><path d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'/></svg>" alt="Student Council">
+        </div>
+        <p class="role-desc">
+          Led the arts department within the student council. Collaborated with 
+          diverse students, successfully ran multiple events, and developed 
+          customized creative concepts throughout the school year.
+        </p>
+        <div class="role-tags">
+          <span class="role-tag">Leadership</span>
+          <span class="role-tag">Event Management</span>
+          <span class="role-tag">Creative Direction</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="exhibitions">
+  <div class="section-header reveal">
+    <span class="section-num">05 /</span>
+    <h2 class="section-title" style="color: var(--red);">EXHIBITIONS</h2>
+  </div>
+
+  <div class="exhibition-hero">
+    <div class="exhibition-title-block reveal">
+      <div class="exhibition-meta">
+        <div class="meta-item">
+          <span class="meta-label">Year</span>
+          <span class="meta-value">2025 — 2026</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Type</span>
+          <span class="meta-value">IB Visual Arts Exhibition</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Venue</span>
+          <span class="meta-value">Indus International School</span>
+        </div>
+      </div>
+      <h3 class="exhibition-name">
+        <span>"</span>Power,<br>Politics &amp; Emotions<span>"</span>
+      </h3>
+      
+      <p class="exhibition-desc">
+        A multi-media exhibition exploring the raw intersections of political power, 
+        human emotion, and societal tension. The body of work spans graphite drawings, 
+        acrylic paintings on canvas, digital art, sculptural forms, and mixed-media 
+        installations — each piece serving as a confrontation, a question, or a declaration.
+      </p>
+      <p class="exhibition-desc">
+        Developed as the capstone of my IB Visual Arts programme, the collection challenges 
+        viewers to examine the masks we wear and the invisible systems that govern us. 
+        Through recurring motifs — like the strategic hierarchy of chess pieces and the 
+        cyclical absurdity of a clown carousel — the work transforms abstract concepts into 
+        visceral, emotional landscapes. It is an invitation to look beyond the surface and 
+        engage with the chaotic beauty of the human condition.
+      </p>
+
+      <div style="display: flex; gap: 4rem; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--charcoal);">
+        <div>
+          <span style="display:block; font-family:'Playfair Display', serif; font-size:2.5rem; color:var(--red); font-weight:900; line-height:1;">09</span>
+          <span style="font-family:'DM Mono', monospace; font-size:0.55rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(245,240,232,0.5); margin-top:0.5rem; display:block;">Curated Pieces</span>
+        </div>
+        <div>
+          <span style="display:block; font-family:'Playfair Display', serif; font-size:2.5rem; color:var(--red); font-weight:900; line-height:1;">18</span>
+          <span style="font-family:'DM Mono', monospace; font-size:0.55rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(245,240,232,0.5); margin-top:0.5rem; display:block;">Months in Studio</span>
+        </div>
+        <div>
+          <span style="display:block; font-family:'Playfair Display', serif; font-size:2.5rem; color:var(--red); font-weight:900; line-height:1;">∞</span>
+          <span style="font-family:'DM Mono', monospace; font-size:0.55rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(245,240,232,0.5); margin-top:0.5rem; display:block;">Mediums Explored</span>
+        </div>
+      </div>
+    </div>
+    <div class="gallery-grid reveal" style="transition-delay:0.2s">
+      <div class="gallery-item">
+        <div class="img-placeholder">
+          <img src="images/Exhibition/chess-queen.jpeg" alt="">
+        </div>
+        <div class="gallery-caption">
+          <div class="gallery-caption-text">Acrylic on Canvas</div>
+        </div>
+      </div>
+      <div class="gallery-item tall">
+        <div class="img-placeholder" style="min-height:100%; height:100%;">
+          <img src="images/Exhibition/train.jpg" alt="">
+        </div>
+        <div class="gallery-caption">
+          <div class="gallery-caption-text">Acrylic on Canvas</div>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="img-placeholder">
+          <img src="images/Exhibition/snake-chess.jpg" alt="">
+        </div>
+        <div class="gallery-caption">
+          <div class="gallery-caption-text">Acrylic on Canvas</div>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <img src="images/exhibition/clown.jpg" alt="Train Painting">
+        
+        <div class="gallery-caption">
+          <div class="gallery-caption-text">Acrylic on Canvas</div>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <img src="images/exhibition/gods.jpg" alt="heart-sculpture">
+        
+        <div class="gallery-caption">
+          <div class="gallery-caption-text">Gods</div>
+        </div>
+      </div>
+      <div class="gallery-item" style="grid-column: span 3; aspect-ratio: 21/9;">
+        <img src="images/exhibition/love-chaos.jpg" alt="Love Chaos Wrath Installation">
+        
+        <div class="gallery-caption">
+          <div class="gallery-caption-text">Installation / Digital</div>
+        </div>
+      </div>
+  </div>
+</section>
+
+<section id="photography">
+  <div class="section-header reveal">
+    <span class="section-num">06 /</span>
+    <h2 class="section-title">Photography<br>&amp; <em>Digital Worlds</em></h2>
+  </div>
+
+  <div class="gallery-grid reveal" style="transition-delay:0.2s">
+    <div class="gallery-item">
+      <img src="images/photography/photo-1.jpg" alt="Photography Collection 1">
+      <div class="gallery-caption">
+        <div class="gallery-caption-text">Photography — Urban / Architecture</div>
+      </div>
+    </div>
+
+    <div class="gallery-item">
+      <img src="images/photography/photo-2.jpg" alt="Photography Collection 2">
+      <div class="gallery-caption">
+        <div class="gallery-caption-text">Photography — Portrait</div>
+      </div>
+    </div>
+
+    <div class="gallery-item">
+      <img src="images/photography/photo-3.jpg" alt="Photography Collection 3">
+      <div class="gallery-caption">
+        <div class="gallery-caption-text">Photography — Conceptual</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" style="grid-column: span 3; aspect-ratio: 21/9;">
+      <img src="images/digital/concept-1.jpg" alt="Digital World Concept Art 1">
+      <div class="gallery-caption">
+        <div class="gallery-caption-text">Environment Concept Art — Procreate</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" style="grid-column: span 3; aspect-ratio: 21/9;">
+      <img src="images/digital/concept-2.jpg" alt="Digital World Concept Art 2">
+      <div class="gallery-caption">
+        <div class="gallery-caption-text">Environment Concept Art — Procreate</div>
+      </div>
+    </div>
+    <div class="gallery-item" style="grid-column: span 3; aspect-ratio: 21/9;">
+      <img src="images/digital/concept-3.jpg" alt="Digital World Additional Work">
+      <div class="gallery-caption">
+        <div class="gallery-caption-text">Additional Digital Work</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="posters">
+  <div class="section-header reveal">
+    <span class="section-num">07 /</span>
+    <h2 class="section-title">Polaroid<br><em>Posters</em></h2>
+  </div>
+
+  <div class="gallery-grid reveal" style="transition-delay:0.2s">
+    <div class="gallery-item">
+      <img src="images/posters/polaroid1.jpg" alt="Polaroid Poster 1">
+      <div class="gallery-caption">
+        <div class="gallery-caption-text">Polaroid Series — I</div>
+      </div>
+    </div>
+
+    <div class="gallery-item">
+      <img src="images/posters/polaroid2.jpg" alt="Polaroid Poster 2">
+      <div class="gallery-caption">
+        <div class="gallery-caption-text">Polaroid Series — II</div>
+      </div>
+    </div>
+
+    <div class="gallery-item">
+      <img src="images/posters/polaroid-3.jpg" alt="Polaroid Poster 3">
+      <div class="gallery-caption">
+        <div class="gallery-caption-text">Polaroid Series — III</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="technical">
+  <div class="section-header reveal">
+    <span class="section-num">09 /</span>
+    <h2 class="section-title">Technical<br><em>Projects</em></h2>
+  </div>
+  <div class="technical-grid">
+    <div class="technical-info reveal">
+      <div class="tech-tag">DT Internal Assessment</div>
+      <h3 class="tech-project-title">Rehabilitation<br>Exoskeleton<br>Design</h3>
+      <p class="tech-desc">
+        A comprehensive Design Technology Internal Assessment exploring the engineering 
+        and human-centred design of a wearable rehabilitation exoskeleton. The project 
+        spans user research, ergonomic analysis, orthographic projections, and full 
+        3D modelling — bridging art and engineering.
+      </p>
+      <div class="tech-specs">
+        <div class="spec-item">
+          <span class="spec-label">Subject</span>
+          <span class="spec-value">Design Technology SL</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Type</span>
+          <span class="spec-value">Internal Assessment</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Methods</span>
+          <span class="spec-value">3D CAD Modelling</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Output</span>
+          <span class="spec-value">Ortho. Projections</span>
+        </div>
+        <div class="spec-item" style="grid-column:span 2; border-right:none;">
+          <span class="spec-label">Focus Areas</span>
+          <span class="spec-value">Ergonomics / Biomechanics / Human-Centred Design</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="technical-visuals reveal" style="transition-delay:0.2s">
+      <div class="tech-visual main">
+        <img src="images/dt/1.jpg" alt="3D Model Main View" class="tech-img">
+      </div>
+      
+      <div class="tech-visual">
+        <img src="images/dt/2.jpg" alt="Orthographic Projections" class="tech-img">
+      </div>
+      
+      <div class="tech-visual">
+        <img src="images/dt/3.jpg" alt="Detail View" class="tech-img">
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+<section id="contact">
+  <div class="contact-inner">
+    <div class="contact-pre">Available for commissions &amp; collaborations</div>
+    <h2 class="contact-headline">Let's create<br>something<br>beautiful.</h2>
+    <div class="contact-links">
+      <a href="mailto:nagadityavajjhala@gmail.com" class="contact-link">nagadityavajjhala@gmail.com</a>
+      <a href="tel:+919114549871" class="contact-link">+91 9114549871</a>
+      <a href="https://www.linkedin.com/in/nag-aditya-vajjhala-4735a32bb/" target="_blank" class="contact-link">LinkedIn</a>
+      <a href="https://www.instagram.com/nagadityavajjhala" target="_blank" class="contact-link">@nagadityavajjhala</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-copy">© 2026 Nag Aditya Vajjhala. All rights reserved.</span>
+  <a href="https://www.instagram.com/nagadityavajjhala" target="_blank" class="footer-ig">@nagadityavajjhala</a>
+</footer>
+
+<script>
+  // HIGH SPEED CURSOR (0.35 multiplier)
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.transform = `translate3d(calc(${mx}px - 50%), calc(${my}px - 50%), 0)`;
+  });
+
+  function animateRing() {
+    rx += (mx - rx) * 0.35;
+    ry += (my - ry) * 0.35;
+    ring.style.transform = `translate3d(calc(${rx}px - 50%), calc(${ry}px - 50%), 0)`;
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // LOADER AND SEAMLESS LAG-FREE TRANSITION
+  document.addEventListener("DOMContentLoaded", () => {
+    const loader = document.getElementById('loader');
+    
+    // Create the overlay that holds the name and prompt
+    const centerOverlay = document.createElement('div');
+    centerOverlay.id = 'center-overlay';
+    centerOverlay.innerHTML = `
+      <h1 class="loader-name">
+        <span class="the">the</span>
+        Nag<br>Aditya<br>Vajjhala
+      </h1>
+      <div class="scroll-prompt">Please scroll down</div>
+    `;
+    document.body.appendChild(centerOverlay);
+
+    const loaderName = centerOverlay.querySelector('.loader-name');
+    const scrollPrompt = centerOverlay.querySelector('.scroll-prompt');
+    const heroName = document.querySelector('.hero-name');
+    const heroPhoto = document.querySelector('.hero-photo');
+    const animatedElements = document.querySelectorAll('.hero-eyebrow, .hero-tagline, .hero-cta, .hero-scroll-hint');
+
+    // 1. After 5s loading screen drops out, show overlay text
+    setTimeout(() => {
+      if(loader) loader.style.opacity = '0';
+      centerOverlay.classList.add('visible');
+      setTimeout(() => { if(loader) loader.remove() }, 800);
+
+      // ALLOW SCROLLING IMMEDIATELY to prevent the "frozen" feeling
+      document.body.classList.remove('loading');
+      document.body.classList.remove('locked');
+
+      // Start listening for the first scroll attempt (non-blocking)
+      window.addEventListener('scroll', triggerTransition, { once: true });
+      window.addEventListener('wheel', triggerTransition, { once: true });
+      window.addEventListener('touchstart', triggerTransition, { once: true });
+    }, 5000);
+
+    function triggerTransition() {
+      // Fade out scroll prompt instantly
+      scrollPrompt.style.opacity = '0';
+
+      // Find exactly where the name needs to end up
+      const targetRect = heroName.getBoundingClientRect();
+      const startRect = loaderName.getBoundingClientRect();
+
+      const xMove = targetRect.left - startRect.left;
+      const yMove = targetRect.top - startRect.top;
+
+      // Animate the name across the screen smoothly
+      loaderName.style.transform = `translate(${xMove}px, ${yMove}px)`;
+      loaderName.style.textAlign = 'left';
+
+      // Trigger the rest of the original elements fading in
+      // No delay on photo so it appears instantly
+      if(heroPhoto) heroPhoto.style.opacity = '1'; 
+      animatedElements.forEach(el => el.classList.add('animate-in'));
+
+      // Once the glide is done, snap the real elements in and clean up the overlay
+      setTimeout(() => {
+        heroName.style.opacity = '1';
+        centerOverlay.remove();
+      }, 1200);
+    }
+  });
+
+  // SMART NAVBAR LOGIC (Hide on scroll down, show on scroll up)
+  let lastScrollY = window.scrollY;
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    // Wait until transition phase is mostly cleared or body is unlocked
+    if (!document.body.classList.contains('locked')) {
+      if (window.scrollY > lastScrollY && window.scrollY > 80) {
+        nav.style.transform = 'translateY(-100%)';
+        nav.style.opacity = '0';
+      } else {
+        nav.style.transform = 'translateY(0)';
+        nav.style.opacity = '1';
+      }
+      lastScrollY = window.scrollY;
+    }
+  });
+
+  // SCROLL REVEAL
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+  reveals.forEach(el => observer.observe(el));
+
+  // NAV active section highlight
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 200) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.opacity = a.getAttribute('href') === '#' + current ? '1' : '0.7';
+    });
+  });
+</script>
+</body>
+</html>
