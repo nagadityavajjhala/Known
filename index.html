@@ -1772,7 +1772,6 @@
     ringRAF = requestAnimationFrame(animateRing);
   }
 
-  // Stop cursor animation when mouse stops moving for 100ms
   let cursorTimeout;
   document.addEventListener('mousemove', () => {
     clearTimeout(cursorTimeout);
@@ -1782,31 +1781,87 @@
     }, 100);
   });
 
-  // IMAGE PRELOADER - preload all critical images during loading screen
-  const criticalImages = [
-    'hero.jpg',
-    'images/travel/1.jpg', 'images/travel/2.jpg', 'images/travel/3.jpg',
-    'images/travel/4.jpg', 'images/travel/5.jpg', 'images/travel/6.jpg',
-    'images/travel/7.jpg', 'images/travel/8.jpg', 'images/travel/9.jpg',
-    'images/travel/10.JPG', 'images/travel/11.jpg', 'images/travel/12.jpg',
-    'images/travel/13.jpg', 'images/travel/14.jpg', 'images/travel/15.jpg',
-    'images/travel/16.jpg', 'images/travel/17.jpg', 'images/travel/18.jpg',
-    'images/travel/19.jpg', 'images/travel/20.jpg',
-    'images/Exhibition/chess-queen.jpeg', 'images/Exhibition/train.jpg',
-    'images/Exhibition/snake-chess.jpg', 'images/Exhibition/clown.jpg',
-    'images/Exhibition/gods.jpg', 'images/Exhibition/love-chaos.jpg'
+  // PRIORITIZED PRELOADER with limited concurrency
+  // Tiers: hero first, then travel, then exhibition
+  const preloadTiers = [
+    ['hero.jpg'],
+    [
+      'images/travel/1.jpg', 'images/travel/2.jpg', 'images/travel/3.jpg',
+      'images/travel/4.jpg', 'images/travel/5.jpg', 'images/travel/6.jpg',
+      'images/travel/7.jpg', 'images/travel/8.jpg',
+    ],
+    [
+      'images/travel/9.jpg', 'images/travel/10.JPG', 'images/travel/11.jpg',
+      'images/travel/12.jpg', 'images/travel/13.jpg', 'images/travel/14.jpg',
+      'images/travel/15.jpg', 'images/travel/16.jpg',
+    ],
+    [
+      'images/travel/17.jpg', 'images/travel/18.jpg', 'images/travel/19.jpg',
+      'images/travel/20.jpg',
+      'images/Exhibition/chess-queen.jpeg', 'images/Exhibition/train.jpg',
+      'images/Exhibition/snake-chess.jpg', 'images/Exhibition/clown.jpg',
+      'images/Exhibition/gods.jpg', 'images/Exhibition/love-chaos.jpg'
+    ]
   ];
 
-  function preloadImages(urls, onProgress) {
-    let loaded = 0;
+  const allImages = preloadTiers.flat();
+  let imagesLoaded = new Set();
+
+  function preloadWithConcurrency(urls, maxConcurrent, onProgress) {
+    let index = 0;
+    let completed = 0;
     const total = urls.length;
-    urls.forEach(url => {
+
+    function loadNext() {
+      if (index >= total) return;
+      const url = urls[index++];
       const img = new Image();
       img.onload = img.onerror = () => {
-        loaded++;
-        onProgress(loaded, total);
+        imagesLoaded.add(url);
+        completed++;
+        onProgress(completed, total);
+        loadNext();
       };
       img.src = url;
+    }
+
+    for (let i = 0; i < maxConcurrent; i++) loadNext();
+  }
+
+  // Hero image preloader with decode for glitch-free transition
+  let heroImageReady = false;
+  let heroImgLoaded = false;
+  function preloadHeroImage() {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        try {
+          img.decode().then(() => {
+            heroImageReady = true;
+            heroImgLoaded = true;
+            // Set on the actual DOM element
+            const heroPhoto = document.querySelector('.hero-photo');
+            if (heroPhoto) {
+              heroPhoto.src = 'hero.jpg';
+              heroImageReady = true;
+            }
+            resolve();
+          }).catch(() => {
+            heroImageReady = true;
+            heroImgLoaded = true;
+            resolve();
+          });
+        } catch(e) {
+          heroImageReady = true;
+          heroImgLoaded = true;
+          resolve();
+        }
+      };
+      img.onerror = () => {
+        heroImageReady = true;
+        resolve();
+      };
+      img.src = 'hero.jpg';
     });
   }
 
@@ -1827,7 +1882,7 @@
     const loader = document.getElementById('loader');
     const progressFill = document.getElementById('progressFill');
     const progressText = document.getElementById('progressText');
-    
+
     // Create the overlay that holds the name and prompt
     const centerOverlay = document.createElement('div');
     centerOverlay.id = 'center-overlay';
@@ -1846,17 +1901,61 @@
     const heroPhoto = document.querySelector('.hero-photo');
     const animatedElements = document.querySelectorAll('.hero-eyebrow, .hero-tagline, .hero-cta, .hero-scroll-hint');
 
-    // Start preloading images immediately
-    let preloaded = false;
-    preloadImages(criticalImages, (loaded, total) => {
-      const pct = Math.round((loaded / total) * 100);
-      if (progressFill) progressFill.style.width = pct + '%';
-      if (progressText) progressText.textContent = `Loading ${loaded}/${total}`;
-      if (loaded === total) {
-        preloaded = true;
-        if (progressText) progressText.textContent = 'Ready';
-      }
-    });
+    // Preload hero image first with decode
+    const heroPromise = preloadHeroImage();
+
+    // Preload other images in tiers with max 3 concurrent
+    let tierIndex = 0;
+    function loadNextTier() {
+      if (tierIndex >= preloadTiers.length) return;
+      const tier = preloadTiers[tierIndex];
+      tierIndex++;
+      preloadWithConcurrency(tier, 3, (loaded, total) => {
+        const allLoaded = imagesLoaded.size;
+        const allTotal = allImages.length;
+        const pct = Math.round((allLoaded / allTotal) * 100);
+        if (progressFill) progressFill.style.width = pct + '%';
+        if (progressText) progressText.textContent = `Loading ${allLoaded}/${allTotal}`;
+      });
+      setTimeout(loadNextTier, 300);
+    }
+    loadNextTier();
+
+    let transitionFired = false;
+    function triggerTransition() {
+      if (transitionFired) return;
+      transitionFired = true;
+
+      // Wait for hero to be ready
+      heroPromise.then(() => {
+        // Fade out scroll prompt instantly
+        scrollPrompt.style.opacity = '0';
+
+        // Find exactly where the name needs to end up
+        const targetRect = heroName.getBoundingClientRect();
+        const startRect = loaderName.getBoundingClientRect();
+
+        const xMove = targetRect.left - startRect.left;
+        const yMove = targetRect.top - startRect.top;
+
+        // Animate the name across the screen smoothly
+        loaderName.style.transform = `translate(${xMove}px, ${yMove}px)`;
+        loaderName.style.textAlign = 'left';
+
+        // Image is already decoded, set opacity immediately - no flash
+        if (heroPhoto) {
+          heroPhoto.src = 'hero.jpg';
+          heroPhoto.style.opacity = '1';
+        }
+        animatedElements.forEach(el => el.classList.add('animate-in'));
+
+        // Once the glide is done, snap the real elements in and clean up the overlay
+        setTimeout(() => {
+          heroName.style.opacity = '1';
+          centerOverlay.remove();
+        }, 1200);
+      });
+    }
 
     // 1. After 5s loading screen drops out, show overlay text
     setTimeout(() => {
@@ -1873,32 +1972,6 @@
       window.addEventListener('wheel', triggerTransition, { once: true });
       window.addEventListener('touchstart', triggerTransition, { once: true });
     }, 5000);
-
-    function triggerTransition() {
-      // Fade out scroll prompt instantly
-      scrollPrompt.style.opacity = '0';
-
-      // Find exactly where the name needs to end up
-      const targetRect = heroName.getBoundingClientRect();
-      const startRect = loaderName.getBoundingClientRect();
-
-      const xMove = targetRect.left - startRect.left;
-      const yMove = targetRect.top - startRect.top;
-
-      // Animate the name across the screen smoothly
-      loaderName.style.transform = `translate(${xMove}px, ${yMove}px)`;
-      loaderName.style.textAlign = 'left';
-
-      // Trigger the rest of the original elements fading in
-      if(heroPhoto) heroPhoto.style.opacity = '1'; 
-      animatedElements.forEach(el => el.classList.add('animate-in'));
-
-      // Once the glide is done, snap the real elements in and clean up the overlay
-      setTimeout(() => {
-        heroName.style.opacity = '1';
-        centerOverlay.remove();
-      }, 1200);
-    }
   });
 
   // SMART NAVBAR LOGIC - throttled
