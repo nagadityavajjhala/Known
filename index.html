@@ -1351,7 +1351,7 @@
       <img src="images/travel/7.jpg" class="travel-img" alt="Travel" decoding="async">
       <img src="images/travel/8.jpg" class="travel-img" alt="Travel" decoding="async">
       <img src="images/travel/9.jpg" class="travel-img" alt="Travel" decoding="async">
-      <img src="images/travel/10.JPG" class="travel-img" alt="Travel" decoding="async">
+      <img src="images/travel/10.jpg" class="travel-img" alt="Travel" decoding="async">
       <img src="images/travel/11.jpg" class="travel-img" alt="Travel" decoding="async">
       <img src="images/travel/12.jpg" class="travel-img" alt="Travel" decoding="async">
       <img src="images/travel/1.jpg" class="travel-img" alt="Travel" decoding="async">
@@ -1363,7 +1363,7 @@
       <img src="images/travel/7.jpg" class="travel-img" alt="Travel" decoding="async">
       <img src="images/travel/8.jpg" class="travel-img" alt="Travel" decoding="async">
       <img src="images/travel/9.jpg" class="travel-img" alt="Travel" decoding="async">
-      <img src="images/travel/10.JPG" class="travel-img" alt="Travel" decoding="async">
+      <img src="images/travel/10.jpg" class="travel-img" alt="Travel" decoding="async">
       <img src="images/travel/11.jpg" class="travel-img" alt="Travel" decoding="async">
       <img src="images/travel/12.jpg" class="travel-img" alt="Travel" decoding="async">
     </div>
@@ -1791,7 +1791,7 @@
       'images/travel/7.jpg', 'images/travel/8.jpg',
     ],
     [
-      'images/travel/9.jpg', 'images/travel/10.JPG', 'images/travel/11.jpg',
+      'images/travel/9.jpg', 'images/travel/10.jpg', 'images/travel/11.jpg',
       'images/travel/12.jpg', 'images/travel/13.jpg', 'images/travel/14.jpg',
       'images/travel/15.jpg', 'images/travel/16.jpg',
     ],
@@ -1901,7 +1901,7 @@
     const heroPhoto = document.querySelector('.hero-photo');
     const animatedElements = document.querySelectorAll('.hero-eyebrow, .hero-tagline, .hero-cta, .hero-scroll-hint');
 
-    // Preload hero image first with decode
+    // Preload hero image first with decode - BLOCKING
     const heroPromise = preloadHeroImage();
 
     // Preload other images in tiers with max 3 concurrent
@@ -1922,11 +1922,13 @@
     loadNextTier();
 
     let transitionFired = false;
+    let loaderReady = false;
+
     function triggerTransition() {
       if (transitionFired) return;
       transitionFired = true;
 
-      // Wait for hero to be ready
+      // Wait for hero image to be fully decoded
       heroPromise.then(() => {
         // Fade out scroll prompt instantly
         scrollPrompt.style.opacity = '0';
@@ -1942,17 +1944,19 @@
         loaderName.style.transform = `translate(${xMove}px, ${yMove}px)`;
         loaderName.style.textAlign = 'left';
 
-        // Image is already decoded, set opacity immediately - no flash
+        // Hero image already decoded - instant display, no glitch
         if (heroPhoto) {
-          heroPhoto.src = 'hero.jpg';
           heroPhoto.style.opacity = '1';
         }
         animatedElements.forEach(el => el.classList.add('animate-in'));
 
-        // Once the glide is done, snap the real elements in and clean up the overlay
+        // Once the glide is done, snap real elements, unlock scroll, clean up
         setTimeout(() => {
           heroName.style.opacity = '1';
+          document.body.classList.remove('loading');
+          document.body.classList.remove('locked');
           centerOverlay.remove();
+          loaderReady = true;
         }, 1200);
       });
     }
@@ -1963,16 +1967,23 @@
       centerOverlay.classList.add('visible');
       setTimeout(() => { if(loader) loader.remove() }, 800);
 
-      // ALLOW SCROLLING IMMEDIATELY
-      document.body.classList.remove('loading');
-      document.body.classList.remove('locked');
-
-      // Start listening for the first scroll attempt (non-blocking)
+      // Start listening for the first scroll attempt
       window.addEventListener('scroll', triggerTransition, { once: true });
       window.addEventListener('wheel', triggerTransition, { once: true });
       window.addEventListener('touchstart', triggerTransition, { once: true });
     }, 5000);
+
+    // Also handle click-based transition as fallback
+    centerOverlay.addEventListener('click', triggerTransition);
   });
+
+  // BLOCK ALL SCROLL DURING LOADING - only process after transition completes
+  let scrollQueue = [];
+  window.addEventListener('scroll', () => {
+    if (document.body.classList.contains('locked')) {
+      window.scrollTo(0, 0);
+    }
+  }, { passive: false });
 
   // SMART NAVBAR LOGIC - throttled
   let lastScrollY = window.scrollY;
