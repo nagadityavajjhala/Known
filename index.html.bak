@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NAG ADITYA VAJJHALA — Artist & Designer</title>
-<link rel="preload" href="hero.jpg" as="image" fetchpriority="high">
+<link rel="preload" href="hero.jpg" as="image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="dns-prefetch" href="https://fonts.googleapis.com">
@@ -804,68 +804,6 @@
     letter-spacing: 0.05em;
   }
 
-  /* CLIENT WORK */
-  #client-work { background: var(--off-black); }
-  .client-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-  }
-  .client-card {
-    border: 1px solid var(--charcoal);
-    background: var(--black);
-    overflow: hidden;
-    cursor: none;
-    transition: border-color 0.3s, transform 0.3s;
-  }
-  .client-card:hover {
-    border-color: var(--red);
-    transform: translateY(-4px);
-  }
-  .client-card-image {
-    width: 100%;
-    aspect-ratio: 3/4;
-    background: var(--charcoal);
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .client-card-image img {
-    width: 100%; height: 100%;
-    object-fit: contain;
-    transition: transform 0.4s;
-    padding: 0.5rem;
-  }
-  .client-card:hover .client-card-image img {
-    transform: scale(1.02);
-  }
-  .client-card-body {
-    padding: 1.5rem;
-  }
-  .client-card-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 1.2rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: var(--cream);
-    margin-bottom: 0.3rem;
-    line-height: 1.2;
-  }
-  .client-card-client {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    color: var(--red);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 0.75rem;
-  }
-  .client-card-desc {
-    font-size: 0.85rem;
-    line-height: 1.7;
-    color: rgba(245,240,232,0.6);
-  }
-
   /* TECHNICAL PROJECT */
   #technical {
     background: var(--black);
@@ -1075,7 +1013,6 @@
     .exhibition-hero { grid-template-columns: 1fr; }
     .technical-grid { grid-template-columns: 1fr; }
     .gallery-grid { grid-template-columns: 1fr 1fr; }
-    .client-grid { grid-template-columns: 1fr; }
     .education-grid { grid-template-columns: 1fr; } 
     nav { padding: 1rem 1.5rem; }
     section { padding: 4rem 1.5rem; }
@@ -1132,7 +1069,7 @@
   </div>
   <div class="hero-right">
     <div class="hero-image-placeholder">
-      <img src="hero.jpg" alt="Nag Aditya Vajjhala" class="hero-photo" decoding="async" fetchpriority="high">
+      <img src="hero.jpg" alt="Nag Aditya Vajjhala" class="hero-photo" decoding="async">
     </div>
     <div class="hero-stats">
       <div class="stat">
@@ -1668,51 +1605,9 @@
   </div>
 </section>
 
-<section id="client-work">
-  <div class="section-header reveal">
-    <span class="section-num">06 /</span>
-    <h2 class="section-title">Client<br><em>Work</em></h2>
-  </div>
-
-  <div class="client-grid reveal" style="transition-delay:0.2s">
-    <div class="client-card">
-      <div class="client-card-image">
-        <img src="images/client/plane-pager-1.jpg" alt="Plane Marketing Pager I" loading="lazy" decoding="async">
-      </div>
-      <div class="client-card-body">
-        <div class="client-card-title">Marketing Pager — I</div>
-        <div class="client-card-client">◆ Plane</div>
-        <p class="client-card-desc">A marketing brochure / pager design for Plane, combining bold typography with clean layout to communicate brand value propositions effectively.</p>
-      </div>
-    </div>
-
-    <div class="client-card">
-      <div class="client-card-image">
-        <img src="images/client/plane-pager-2.jpg" alt="Plane Marketing Pager II" loading="lazy" decoding="async">
-      </div>
-      <div class="client-card-body">
-        <div class="client-card-title">Marketing Pager — II</div>
-        <div class="client-card-client">◆ Plane</div>
-        <p class="client-card-desc">A second marketing collateral piece for Plane, featuring a refined visual hierarchy and product-focused imagery to drive audience engagement.</p>
-      </div>
-    </div>
-
-    <div class="client-card">
-      <div class="client-card-image">
-        <img src="images/client/kalinga-ad.jpg" alt="Kalinga Print Advertisement" loading="lazy" decoding="async">
-      </div>
-      <div class="client-card-body">
-        <div class="client-card-title">Print Advertisement</div>
-        <div class="client-card-client">◆ Kalinga Ads</div>
-        <p class="client-card-desc">A print advertisement designed for Kalinga, using striking visuals and concise copy to capture attention across regional media publications.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
 <section id="photography">
   <div class="section-header reveal">
-    <span class="section-num">07 /</span>
+    <span class="section-num">06 /</span>
     <h2 class="section-title">Photography<br>&amp; <em>Digital Worlds</em></h2>
   </div>
 
@@ -1762,7 +1657,7 @@
 
 <section id="posters">
   <div class="section-header reveal">
-    <span class="section-num">08 /</span>
+    <span class="section-num">07 /</span>
     <h2 class="section-title">Polaroid<br><em>Posters</em></h2>
   </div>
 
@@ -1898,7 +1793,7 @@
   });
 
   // PRIORITIZED PRELOADER with limited concurrency
-  // Tiers: hero first, then travel, exhibition, remaining sections
+  // Tiers: hero first, then travel, then exhibition
   const preloadTiers = [
     ['hero.jpg'],
     [
@@ -1917,19 +1812,6 @@
       'images/Exhibition/chess-queen.jpeg', 'images/Exhibition/train.jpg',
       'images/Exhibition/snake-chess.jpg', 'images/Exhibition/clown.jpg',
       'images/Exhibition/gods.jpg', 'images/Exhibition/love-chaos.jpg'
-    ],
-    [
-      'images/Photography/photo-1.jpg', 'images/Photography/photo-2.jpg',
-      'images/Photography/photo-3.jpg',
-      'images/digital/concept-1.jpg', 'images/digital/concept-2.jpg',
-      'images/digital/concept-3.jpg',
-    ],
-    [
-      'images/posters/polaroid1.jpg', 'images/posters/polaroid2.jpg',
-      'images/posters/polaroid-3.jpg',
-      'images/client/plane-pager-1.jpg', 'images/client/plane-pager-2.jpg',
-      'images/client/kalinga-ad.jpg',
-      'images/dt/1.jpg', 'images/dt/2.jpg', 'images/dt/3.jpg',
     ]
   ];
 
@@ -2039,14 +1921,14 @@
       if (tierIndex >= preloadTiers.length) return;
       const tier = preloadTiers[tierIndex];
       tierIndex++;
-      preloadWithConcurrency(tier, 4, (loaded, total) => {
+      preloadWithConcurrency(tier, 3, (loaded, total) => {
         const allLoaded = imagesLoaded.size;
         const allTotal = allImages.length;
         const pct = Math.round((allLoaded / allTotal) * 100);
         if (progressFill) progressFill.style.width = pct + '%';
         if (progressText) progressText.textContent = `Loading ${allLoaded}/${allTotal}`;
       });
-      setTimeout(loadNextTier, 80);
+      setTimeout(loadNextTier, 300);
     }
     loadNextTier();
 
