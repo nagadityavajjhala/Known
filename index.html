@@ -38,23 +38,30 @@
   body.locked {
     height: 100vh;
     overflow: hidden;
+    overscroll-behavior: none;
+    touch-action: none;
   }
 
   /* LOADER & INTRO OVERLAY */
   #loader {
     position: fixed; inset: 0; background: var(--black); z-index: 2000;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem;
+    display: flex; align-items: center; justify-content: center;
     transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .loader-content {
+    display: flex; flex-direction: column; align-items: center; gap: 2rem;
+    width: min(360px, 70vw); max-width: 90%;
   }
   
   .loader-logo {
     font-family: 'Barlow Condensed', sans-serif; font-size: clamp(2rem, 5vw, 4rem);
-    font-weight: 700; letter-spacing: 0.3em; color: var(--cream);
+    font-weight: 700; letter-spacing: 0.3em; color: var(--cream); text-align: center;
+    width: 100%;
     animation: pulseLogo 4.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
   }
 
   .loader-progress-bar {
-    width: 200px; height: 2px; background: var(--charcoal); border-radius: 1px; overflow: hidden;
+    width: 100%; height: 2px; background: var(--charcoal); border-radius: 1px; overflow: hidden;
   }
   .loader-progress-fill {
     height: 100%; width: 0%; background: var(--red); border-radius: 1px;
@@ -62,7 +69,8 @@
   }
   .loader-progress-text {
     font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em;
-    color: rgba(245,240,232,0.4); text-transform: uppercase;
+    color: rgba(245,240,232,0.4); text-transform: uppercase; text-align: center;
+    width: 100%;
   }
   
   @keyframes pulseLogo {
@@ -183,6 +191,7 @@
     letter-spacing: -0.02em;
     color: var(--cream);
     opacity: 0;
+    transition: opacity 0.8s ease;
   }
 
   .hero-name .the {
@@ -1010,14 +1019,16 @@
   }
 </style>
 </head>
-<body>
+<body class="locked">
 
 <div id="loader">
-  <div class="loader-logo">NAV ✦</div>
-  <div class="loader-progress-bar">
-    <div class="loader-progress-fill" id="progressFill"></div>
+  <div class="loader-content">
+    <div class="loader-logo">NAV ✦</div>
+    <div class="loader-progress-bar">
+      <div class="loader-progress-fill" id="progressFill"></div>
+    </div>
+    <div class="loader-progress-text" id="progressText">Loading...</div>
   </div>
-  <div class="loader-progress-text" id="progressText">Loading...</div>
 </div>
 
 <div class="cursor" id="cursor"></div>
@@ -1928,37 +1939,42 @@
       if (transitionFired) return;
       transitionFired = true;
 
-      // Wait for hero image to be fully decoded
-      heroPromise.then(() => {
-        // Fade out scroll prompt instantly
-        scrollPrompt.style.opacity = '0';
+      // Immediately unlock scroll so user can scroll freely
+      document.body.classList.remove('locked');
+      document.body.classList.remove('loading');
 
-        // Find exactly where the name needs to end up
-        const targetRect = heroName.getBoundingClientRect();
-        const startRect = loaderName.getBoundingClientRect();
+      // Fade out scroll prompt
+      scrollPrompt.style.opacity = '0';
 
-        const xMove = targetRect.left - startRect.left;
-        const yMove = targetRect.top - startRect.top;
+      // Find exactly where the name needs to end up
+      const targetRect = heroName.getBoundingClientRect();
+      const startRect = loaderName.getBoundingClientRect();
 
-        // Animate the name across the screen smoothly
-        loaderName.style.transform = `translate(${xMove}px, ${yMove}px)`;
-        loaderName.style.textAlign = 'left';
+      const xMove = targetRect.left - startRect.left;
+      const yMove = targetRect.top - startRect.top;
 
-        // Hero image already decoded - instant display, no glitch
-        if (heroPhoto) {
+      // Animate the name across the screen smoothly
+      loaderName.style.transform = `translate(${xMove}px, ${yMove}px)`;
+      loaderName.style.textAlign = 'left';
+
+      // Show hero elements immediately
+      animatedElements.forEach(el => el.classList.add('animate-in'));
+
+      // Fade hero name in during the glide
+      heroName.style.opacity = '1';
+
+      // Hero image: fade in when decoded
+      if (heroPhoto) {
+        heroPromise.then(() => {
           heroPhoto.style.opacity = '1';
-        }
-        animatedElements.forEach(el => el.classList.add('animate-in'));
+        });
+      }
 
-        // Once the glide is done, snap real elements, unlock scroll, clean up
-        setTimeout(() => {
-          heroName.style.opacity = '1';
-          document.body.classList.remove('loading');
-          document.body.classList.remove('locked');
-          centerOverlay.remove();
-          loaderReady = true;
-        }, 1200);
-      });
+      // Once the glide is done, clean up overlay
+      setTimeout(() => {
+        centerOverlay.remove();
+        loaderReady = true;
+      }, 1200);
     }
 
     // 1. After 5s loading screen drops out, show overlay text
@@ -1977,8 +1993,13 @@
     centerOverlay.addEventListener('click', triggerTransition);
   });
 
-  // BLOCK ALL SCROLL DURING LOADING - only process after transition completes
-  let scrollQueue = [];
+  // BLOCK ALL SCROLL DURING LOADING - prevent event default + reset position
+  window.addEventListener('wheel', (e) => {
+    if (document.body.classList.contains('locked')) e.preventDefault();
+  }, { passive: false });
+  window.addEventListener('touchmove', (e) => {
+    if (document.body.classList.contains('locked')) e.preventDefault();
+  }, { passive: false });
   window.addEventListener('scroll', () => {
     if (document.body.classList.contains('locked')) {
       window.scrollTo(0, 0);
