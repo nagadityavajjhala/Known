@@ -824,15 +824,10 @@
   }
   .client-card-image {
     width: 100%;
-    aspect-ratio: 16/9;
+    aspect-ratio: 3/4;
+    max-height: 420px;
     background: var(--charcoal);
     overflow: hidden;
-  }
-  .client-card-image .img-placeholder {
-    width: 100%; height: 100%;
-    min-height: 100%;
-    border: none;
-    background: var(--charcoal);
   }
   .client-card-image img {
     width: 100%; height: 100%;
@@ -1679,11 +1674,7 @@
   <div class="client-grid reveal" style="transition-delay:0.2s">
     <div class="client-card">
       <div class="client-card-image">
-        <div class="img-placeholder">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(245,240,232,0.3)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m3 16 5-5 3 3 4-4 6 6"/></svg>
-          <span class="ph-label">plane-pager-1.jpg</span>
-          <span class="ph-path">images/client/plane-pager-1.jpg</span>
-        </div>
+        <img src="images/client/plane-pager-1.jpg" alt="Plane Marketing Pager I" loading="lazy" decoding="async">
       </div>
       <div class="client-card-body">
         <div class="client-card-title">Marketing Pager — I</div>
@@ -1694,11 +1685,7 @@
 
     <div class="client-card">
       <div class="client-card-image">
-        <div class="img-placeholder">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(245,240,232,0.3)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m3 16 5-5 3 3 4-4 6 6"/></svg>
-          <span class="ph-label">plane-pager-2.jpg</span>
-          <span class="ph-path">images/client/plane-pager-2.jpg</span>
-        </div>
+        <img src="images/client/plane-pager-2.jpg" alt="Plane Marketing Pager II" loading="lazy" decoding="async">
       </div>
       <div class="client-card-body">
         <div class="client-card-title">Marketing Pager — II</div>
@@ -1709,11 +1696,7 @@
 
     <div class="client-card">
       <div class="client-card-image">
-        <div class="img-placeholder">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(245,240,232,0.3)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m3 16 5-5 3 3 4-4 6 6"/></svg>
-          <span class="ph-label">kalinga-ad.jpg</span>
-          <span class="ph-path">images/client/kalinga-ad.jpg</span>
-        </div>
+        <img src="images/client/kalinga-ad.jpg" alt="Kalinga Print Advertisement" loading="lazy" decoding="async">
       </div>
       <div class="client-card-body">
         <div class="client-card-title">Print Advertisement</div>
@@ -1912,7 +1895,7 @@
   });
 
   // PRIORITIZED PRELOADER with limited concurrency
-  // Tiers: hero first, then travel, then exhibition
+  // Tiers: hero first, then travel, exhibition, remaining sections
   const preloadTiers = [
     ['hero.jpg'],
     [
@@ -1931,6 +1914,19 @@
       'images/Exhibition/chess-queen.jpeg', 'images/Exhibition/train.jpg',
       'images/Exhibition/snake-chess.jpg', 'images/Exhibition/clown.jpg',
       'images/Exhibition/gods.jpg', 'images/Exhibition/love-chaos.jpg'
+    ],
+    [
+      'images/Photography/photo-1.jpg', 'images/Photography/photo-2.jpg',
+      'images/Photography/photo-3.jpg',
+      'images/digital/concept-1.jpg', 'images/digital/concept-2.jpg',
+      'images/digital/concept-3.jpg',
+    ],
+    [
+      'images/posters/polaroid1.jpg', 'images/posters/polaroid2.jpg',
+      'images/posters/polaroid-3.jpg',
+      'images/client/plane-pager-1.jpg', 'images/client/plane-pager-2.jpg',
+      'images/client/kalinga-ad.jpg',
+      'images/dt/1.jpg', 'images/dt/2.jpg', 'images/dt/3.jpg',
     ]
   ];
 
